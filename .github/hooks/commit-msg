@@ -1,0 +1,24 @@
+#!/bin/sh
+
+
+# ===============================================
+# Commit-msg hook to enforce Conventional Commits
+# ===============================================
+
+# Commit message file
+COMMIT_MSG_FILE=$1
+COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+
+# Regex pattern for Conventional Commits
+PATTERN="^(feat|fix|docs|style|refactor|perf|test|chore)(\([a-zA-Z0-9_-]+\))?: .+"
+
+# Check if commit message matches the pattern
+echo "$COMMIT_MSG" | grep -E "$PATTERN" >/dev/null
+if [ $? -ne 0 ]; then
+    echo "Invalid commit message format."
+    echo "Your commit message should follow Conventional Commits:"
+    echo "  <type>[optional scope]: <description>"
+    echo "Allowed types: feat, fix, docs, style, refactor, perf, test, chore"
+    echo "Example: feat(auth): add login endpoint"
+    exit 1
+fi
