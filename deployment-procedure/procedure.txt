@@ -9,13 +9,9 @@ hdfs dfs -put /data/raw/weatherData.csv /data/raw/
 
 hdfs dfs -ls /data/raw
 
-cd ~/bigdata-weather-analysis-sri-lanka/preprocessing/validate-weather-data
+cd ~/bigdata-weather-analysis-sri-lanka
 
-mvn archetype:generate \
-    -DgroupId=validate.weather \
-    -DartifactId=preprocessing \
-    -DarchetypeArtifactId=maven-archetype-quickstart \
-    -DinteractiveMode=false
+mvn archetype:generate  -DgroupId=validate.weather -DartifactId=preprocessing -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
 
 
 maven clean install
