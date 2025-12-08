@@ -1,0 +1,10 @@
+docker exec -it namenode /bin/bash
+hdfs dfs -mkdir -p /data/raw
+
+docker cp data/raw/locationData.csv namenode:/locationData.csv
+docker cp data/raw/weatherData.csv namenode:/weatherData.csv
+
+hdfs dfs -put locationData.csv /data/raw/
+hdfs dfs -put weatherData.csv /data/raw/
+
+hdfs dfs -ls /data/raw
