@@ -15,23 +15,6 @@ services:
     networks:
       - hadoop
 
-  standbynamenode:
-    image: bde2020/hadoop-standbynamenode:2.0.0-hadoop3.2.1-java8
-    container_name: standbynamenode
-    restart: always
-    depends_on:
-      - namenode
-    ports:
-      - "9868:9868" # StandbyNameNode Web UI
-    volumes:
-      - hadoop_standbynamenode:/hadoop/dfs/standbyname
-    environment:
-      SERVICE_PRECONDITION: "namenode:9870"
-    env_file:
-      - ./hadoop.env
-    networks:
-      - hadoop
-
   datanode1:
     image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
     container_name: datanode1
@@ -136,7 +119,6 @@ services:
 
 volumes:
   hadoop_namenode:
-  hadoop_standbynamenode:
   hadoop_datanode1:
   hadoop_datanode2:
   hadoop_datanode3:
