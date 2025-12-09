@@ -22,7 +22,7 @@ public class AnalyseMapper extends Mapper<LongWritable, Text, Text, Text> {
             for (URI uri : cacheFiles) {
                 String path = uri.getPath();
                 if (path.endsWith("locationData.csv")) {
-                    try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+                    try (BufferedReader br = new BufferedReader(new FileReader("locationData.csv"))) {
                         String line;
                         while ((line = br.readLine()) != null) {
                             if (line.toLowerCase().startsWith("location_id")) continue;
