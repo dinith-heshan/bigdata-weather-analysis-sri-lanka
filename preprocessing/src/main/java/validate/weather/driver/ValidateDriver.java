@@ -14,11 +14,8 @@ import validate.weather.reducer.ValidateReducer;
 public class ValidateDriver {
 
     public static void main(String[] args) throws Exception {
-        Configuration conf = new Configuration();
-        String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
-
-        if (otherArgs.length != 2) {
-            System.err.println("Usage: ValidateDriver <input-path> <output-path>");
+        if (args.length != 2) {
+            System.err.println("Usage: ValidatorDriver <input-path> <output-path>");
             System.exit(2);
         }
 
