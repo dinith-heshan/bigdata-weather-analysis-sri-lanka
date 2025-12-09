@@ -7,12 +7,18 @@ docker exec -it namenode /bin/bash
 
 hdfs dfs -mkdir -p /home/data/raw
 
-hdfs dfs -rm -r /data/raw/validation/weather
+hdfs dfs -rm -r /data/raw/validation/weatherData
+hdfs dfs -rm -r /task-2/1-mapreduce/part-1
 
 hdfs dfs -put /home/data/raw/locationData.csv /data/raw/
 hdfs dfs -put /home/data/raw/weatherData.csv /data/raw/
 
 hdfs dfs -ls /data/raw
+hdfs dfs -ls /data/raw/validation/weatherData
+hdfs dfs -ls /task-2/1-mapreduce/part-1
 
-yarn jar /opt/hadoop/preprocessing/target/preprocessing-1.0-SNAPSHOT.jar /data/raw/weatherData.csv /data/raw/validation/weather
+hdfs dfs -cat /data/raw/validation/weatherData/part-r-00000
+hdfs dfs -cat /task-2/1-mapreduce/part-1/part-r-00000
+
+yarn jar /opt/hadoop/preprocessing/target/preprocessing-1.0-SNAPSHOT.jar /data/raw/weatherData.csv /data/raw/validation/weatherData
 yarn jar /opt/hadoop/task-2/1-mapreduce/part-1/postprocessing/target/weather-analysis-1.0-SNAPSHOT.jar /data/raw/weatherData.csv /task-2/1-mapreduce/part-1 /data/raw/locationData.csv
