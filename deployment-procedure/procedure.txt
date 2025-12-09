@@ -1,18 +1,19 @@
+mvn archetype:generate  -DgroupId=validate.weather -DartifactId=preprocessing -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+
+mvn clean install
+
 docker exec -it namenode /bin/bash
-hdfs dfs -mkdir -p /data/raw
 
-docker cp data/raw/locationData.csv namenode:/data/raw/locationData.csv
-docker cp data/raw/weatherData.csv namenode:/data/raw/weatherData.csv
+docker cp data/raw/locationData.csv namenode:/home/data/raw/locationData.csv
+docker cp data/raw/weatherData.csv namenode:/home/data/raw/weatherData.csv
 
-hdfs dfs -put /data/raw/locationData.csv /data/raw/
-hdfs dfs -put /data/raw/weatherData.csv /data/raw/
+hdfs dfs -mkdir -p /home/data/raw
+
+hdfs dfs -rm -r /data/raw/validation/weather
+
+hdfs dfs -put /home/data/raw/locationData.csv /data/raw/
+hdfs dfs -put /home/data/raw/weatherData.csv /data/raw/
 
 hdfs dfs -ls /data/raw
 
-cd ~/bigdata-weather-analysis-sri-lanka
-
-mvn archetype:generate  -DgroupId=validate.weather -DartifactId=preprocessing -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
-
-
-maven clean install
-
+yarn jar target/preprocessing-1.0-SNAPSHOT.jar validate.weather.driver.ValidateDriver /data/raw/weatherData.csv /data/raw/validation/weather
