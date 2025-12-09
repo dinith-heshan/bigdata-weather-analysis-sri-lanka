@@ -10,6 +10,7 @@ services:
       - hadoop_namenode:/hadoop/dfs/name
       - /home/dinithheshan-gcp-bdp-vm/bigdata-weather-analysis-sri-lanka/data:/home/data
       - /home/dinithheshan-gcp-bdp-vm/bigdata-weather-analysis-sri-lanka/preprocessing/target:/opt/hadoop/preprocessing/target
+      - /home/dinithheshan-gcp-bdp-vm/bigdata-weather-analysis-sri-lanka/task-2/1-mapreduce/part-1/postprocessing/target:/opt/hadoop/task-2/1-mapreduce/part-1/postprocessing/target
     environment:
       - CLUSTER_NAME=prod
     env_file:

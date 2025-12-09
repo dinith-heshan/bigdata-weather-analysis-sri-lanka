@@ -15,3 +15,4 @@ hdfs dfs -put /home/data/raw/weatherData.csv /data/raw/
 hdfs dfs -ls /data/raw
 
 yarn jar /opt/hadoop/preprocessing/target/preprocessing-1.0-SNAPSHOT.jar /data/raw/weatherData.csv /data/raw/validation/weather
+yarn jar /opt/hadoop/task-2/1-mapreduce/part-1/postprocessing/target/weather-analysis-1.0-SNAPSHOT.jar /data/raw/weatherData.csv /task-2/1-mapreduce/part-1 /data/raw/locationData.csv
