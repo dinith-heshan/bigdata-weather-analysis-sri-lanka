@@ -40,7 +40,7 @@ public class AnalyseReducer extends Reducer<Text, Text, Text, Text> {
         );
 
         outVal.set(result);
-        context.write(key, outVal);
+        context.write(null, outVal);
     }
 
     private String getMonthOrdinal(int month) {

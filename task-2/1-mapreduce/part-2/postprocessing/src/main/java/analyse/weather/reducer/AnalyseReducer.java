@@ -17,7 +17,7 @@ public class AnalyseReducer extends Reducer<Text, Text, Text, Text> {
         int sum_precipitation_hours = 0;
 
         for (Text val : values) {
-            int precipitation_hours = Integer.parseInt(val.toString().split(",", -1)[1]);
+            int precipitation_hours = Integer.parseInt(val.toString().split(",", -1));
 
             sum_precipitation_hours += precipitation_hours;
         }
@@ -42,7 +42,7 @@ public class AnalyseReducer extends Reducer<Text, Text, Text, Text> {
             monthOrdinal, year, max_sum_precipitation_hours
         );
 
-        context.write(new Text(max_month_year), new Text(result));
+        context.write(null, new Text(result));
     }
 
     private String getMonthOrdinal(int month) {
