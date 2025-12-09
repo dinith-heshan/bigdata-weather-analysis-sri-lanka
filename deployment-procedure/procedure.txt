@@ -4,9 +4,6 @@ mvn clean install
 
 docker exec -it namenode /bin/bash
 
-docker cp data/raw/locationData.csv namenode:/home/data/raw/locationData.csv
-docker cp data/raw/weatherData.csv namenode:/home/data/raw/weatherData.csv
-
 hdfs dfs -mkdir -p /home/data/raw
 
 hdfs dfs -rm -r /data/raw/validation/weather
