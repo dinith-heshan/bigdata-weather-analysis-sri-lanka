@@ -15,7 +15,13 @@ public class ValidateDriver {
 
     public static void main(String[] args) throws Exception {
         if (args.length != 2) {
-            System.err.println("Usage: ValidatorDriver <input-path> <output-path>");
+            System.err.println("Usage: ValidateDriver <input-path> <output-path>");
+            System.err.println("Received args (" + args.length + "):");
+        
+            for (int i = 0; i < args.length; i++) {
+                System.err.println("  args[" + i + "]: " + args[i]);
+            }
+        
             System.exit(1);
         }
 
