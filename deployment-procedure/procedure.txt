@@ -16,4 +16,4 @@ hdfs dfs -put /home/data/raw/weatherData.csv /data/raw/
 
 hdfs dfs -ls /data/raw
 
-yarn jar target/preprocessing-1.0-SNAPSHOT.jar validate.weather.driver.ValidateDriver /data/raw/weatherData.csv /data/raw/validation/weather
+yarn jar /opt/hadoop/preprocessing/target/preprocessing-1.0-SNAPSHOT.jar validate.weather.driver.ValidateDriver /data/raw/weatherData.csv /data/raw/validation/weather
