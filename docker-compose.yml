@@ -8,6 +8,7 @@ services:
       - "9000:9000" # FS Default
     volumes:
       - hadoop_namenode:/hadoop/dfs/name
+      - /home/bigdata-weather-analysis-sri-lanka/preprocessing/target:/opt/hadoop/preprocessing/target
     environment:
       - CLUSTER_NAME=prod
     env_file:
