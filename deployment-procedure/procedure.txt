@@ -1,4 +1,5 @@
 mvn archetype:generate  -DgroupId=validate.weather -DartifactId=preprocessing -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+mvn archetype:generate  -DgroupId=analyse.weather -DartifactId=postprocessing -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
 
 mvn clean install
 
