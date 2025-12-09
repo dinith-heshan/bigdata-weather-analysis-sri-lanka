@@ -17,7 +17,7 @@ public class AnalyseReducer extends Reducer<Text, Text, Text, Text> {
         int sum_precipitation_hours = 0;
 
         for (Text val : values) {
-            int precipitation_hours = Integer.parseInt(val.toString().split(",", -1));
+            int precipitation_hours = Integer.parseInt(val.toString());
 
             sum_precipitation_hours += precipitation_hours;
         }
