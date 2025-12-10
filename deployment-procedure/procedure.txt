@@ -5,6 +5,8 @@ mvn clean install
 
 docker exec -it namenode /bin/bash
 
+hdfs dfs -mkdir -p /data/raw
+
 hdfs dfs -rm -r /data/raw/validation/weatherData
 hdfs dfs -rm -r /task-2/1-mapreduce/part-1
 hdfs dfs -rm -r /task-2/1-mapreduce/part-2
