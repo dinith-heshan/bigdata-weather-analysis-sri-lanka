@@ -1,5 +1,5 @@
-mvn archetype:generate  -DgroupId=validate.weather -DartifactId=preprocessing -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
-mvn archetype:generate  -DgroupId=analyse.weather -DartifactId=postprocessing -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+mvn archetype:generate -DgroupId=validate.weather -DartifactId=preprocessing -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+mvn archetype:generate -DgroupId=analyse.weather -DartifactId=postprocessing -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
 
 mvn clean install
 
@@ -9,8 +9,8 @@ hdfs dfs -rm -r /data/raw/validation/weatherData
 hdfs dfs -rm -r /task-2/1-mapreduce/part-1
 hdfs dfs -rm -r /task-2/1-mapreduce/part-2
 
-hdfs dfs -put /data/raw/locationData.csv /data/raw/
-hdfs dfs -put /data/raw/weatherData.csv /data/raw/
+hdfs dfs -put /home/data/raw/locationData.csv /data/raw/
+hdfs dfs -put /home/data/raw/weatherData.csv /data/raw/
 
 hdfs dfs -ls /data/raw
 hdfs dfs -ls /data/raw/validation/weatherData
