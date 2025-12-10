@@ -11,5 +11,5 @@ CREATE EXTERNAL TABLE locationData (
 ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
 WITH SERDEPROPERTIES ("separatorChar" = ",")
 STORED AS TEXTFILE
-LOCATION '/data/raw/'
+LOCATION '/data/raw/location'
 TBLPROPERTIES ("skip.header.line.count"="1");
