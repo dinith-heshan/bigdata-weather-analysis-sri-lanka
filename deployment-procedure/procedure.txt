@@ -23,7 +23,7 @@ hdfs dfs -ls /data/raw/validation/weatherData
 hdfs dfs -ls /task-2/1-mapreduce/part-1
 hdfs dfs -ls /task-2/1-mapreduce/part-2
 
-hdfs dfs -cat /data/raw/validation/weatherData/part-r-00000
+hdfs dfs -cat /preprocessing/validation/weatherData/part-r-00000
 hdfs dfs -cat /task-2/1-mapreduce/part-1/part-r-00000
 hdfs dfs -cat /task-2/1-mapreduce/part-2/part-r-00000
 
