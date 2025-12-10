@@ -1,7 +1,7 @@
 CREATE TABLE weatherData AS
 SELECT
   location_id,
-  TO_DATE(STR_TO_DATE(raw_date, 'M/d/yyyy')) AS processed_date,
+  TO_DATE(FROM_UNIXTIME(UNIX_TIMESTAMP(raw_date, 'M/d/yyyy'))) AS processed_date,
   weather_code,
   temperature_2m_max,
   temperature_2m_min,
@@ -21,4 +21,4 @@ SELECT
   et0_fao_evapotranspiration,
   sunrise,
   sunset
-FROM weatherData_raw;
+FROM raw_weatherData;
