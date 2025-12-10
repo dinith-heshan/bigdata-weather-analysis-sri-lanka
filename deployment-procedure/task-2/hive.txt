@@ -5,9 +5,9 @@ mvn clean install
 
 docker exec -it namenode /bin/bash
 
-ls -al /opt/hadoop-3.2.1/preprocessing/target
-ls -al /opt/hadoop-3.2.1/task-2/1-mapreduce/part-1/postprocessing/target
-ls -al /opt/hadoop-3.2.1/task-2/1-mapreduce/part-2/postprocessing/target
+ls -al /opt/hadoop/preprocessing/target
+ls -al /opt/hadoop/task-2/1-mapreduce/part-1/postprocessing/target
+ls -al /opt/hadoop/task-2/1-mapreduce/part-2/postprocessing/target
 
 hdfs dfs -mkdir -p /data/raw
 
