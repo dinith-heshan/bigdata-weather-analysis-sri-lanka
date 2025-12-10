@@ -115,7 +115,7 @@ services:
         condition: service_healthy
       namenode:
         condition: service_healthy
-    command: [ "schematool", "-dbType", "postgres", "-initSchema", "-verbose" ]
+    command: [ "schematool", "-dbType", "postgres", "-initSchema", "-verbose", , "-initSchemaIfNeeded"]
     networks:
       - hadoop-net
 
