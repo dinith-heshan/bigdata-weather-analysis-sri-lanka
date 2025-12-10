@@ -23,6 +23,6 @@ hdfs dfs -cat /data/raw/validation/weatherData/part-r-00000
 hdfs dfs -cat /task-2/1-mapreduce/part-1/part-r-00000
 hdfs dfs -cat /task-2/1-mapreduce/part-2/part-r-00000
 
-yarn jar /opt/hadoop/preprocessing/target/preprocessing-1.0-SNAPSHOT.jar /data/raw/weatherData.csv /data/raw/validation/weatherData
-yarn jar /opt/hadoop/task-2/1-mapreduce/part-1/postprocessing/target/weather-analysis-1.0-SNAPSHOT.jar /data/raw/weatherData.csv /task-2/1-mapreduce/part-1 /data/raw/locationData.csv
-yarn jar /opt/hadoop/task-2/1-mapreduce/part-2/postprocessing/target/weather-analysis-1.0-SNAPSHOT.jar /data/raw/weatherData.csv /task-2/1-mapreduce/part-2
+yarn jar /opt/hadoop-3.2.1/preprocessing/target/preprocessing-1.0-SNAPSHOT.jar /data/raw/weatherData.csv /data/raw/validation/weatherData
+yarn jar /opt/hadoop-3.2.1/task-2/1-mapreduce/part-1/postprocessing/target/weather-analysis-1.0-SNAPSHOT.jar /data/raw/weatherData.csv /task-2/1-mapreduce/part-1 /data/raw/locationData.csv
+yarn jar /opt/hadoop-3.2.1/task-2/1-mapreduce/part-2/postprocessing/target/weather-analysis-1.0-SNAPSHOT.jar /data/raw/weatherData.csv /task-2/1-mapreduce/part-2
