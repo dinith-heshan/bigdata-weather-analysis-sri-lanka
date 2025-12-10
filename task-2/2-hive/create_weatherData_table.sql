@@ -1,6 +1,6 @@
-CREATE EXTERNAL TABLE weatherData (
+CREATE EXTERNAL TABLE raw_weatherData (
   location_id INT,
-  date STRING,
+  raw_date STRING,
   weather_code INT,
   temperature_2m_max DOUBLE,
   temperature_2m_min DOUBLE,
