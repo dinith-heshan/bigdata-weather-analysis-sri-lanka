@@ -1,0 +1,7 @@
+CREATE OR REPLACE TEMPORARY VIEW locationData_tmp_view
+USING csv
+OPTIONS (
+  path "/home/data/raw/locationData.csv",
+  header "true",
+  inferSchema "true"
+);
