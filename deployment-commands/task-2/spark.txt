@@ -1,13 +1,11 @@
 docker exec -it namenode /bin/bash
 docker exec -it spark-master /bin/bash
 
-hdfs dfs -mkdir -p /data/raw/location
-hdfs dfs -mkdir -p /data/raw/weather
+hdfs dfs -mkdir -p /data/raw
 
-hdfs dfs -put /home/data/raw/locationData.csv /data/raw/location
-hdfs dfs -put /home/data/raw/weatherData.csv /data/raw/weather
+hdfs dfs -put /home/data/raw/locationData.csv /data/raw
+hdfs dfs -put /home/data/raw/weatherData.csv /data/raw
 
-hdfs dfs -ls /data/raw/location
-hdfs dfs -ls /data/raw/weather
+hdfs dfs -ls /data/raw
 
 /spark/bin/spark-sql
