@@ -1,0 +1,137 @@
+services:
+  namenode:
+    image: ramilu90/hadoop-namenode
+    container_name: namenode
+    platform: linux/amd64
+    restart: always
+    ports:
+      - 9870:9870
+      - 9010:9000
+    volumes:
+      - hadoop_namenode:/hadoop/dfs/name
+    environment:
+      - CLUSTER_NAME=bdp
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:9000
+    env_file:
+      - ./hadoop.env
+
+  datanode1:
+    image: ramilu90/hadoop-datanode
+    container_name: datanode1
+    platform: linux/amd64
+    restart: always
+    volumes:
+      - hadoop_datanode1:/hadoop/dfs/data
+    environment:
+      SERVICE_PRECONDITION: "namenode:9870"
+      CORE_CONF_fs_defaultFS: hdfs://namenode:9000
+    ports:
+      - "9864:9864"
+    env_file:
+      - ./hadoop.env
+
+  datanode2:
+    image: ramilu90/hadoop-datanode
+    container_name: datanode2
+    platform: linux/amd64
+    restart: always
+    volumes:
+      - hadoop_datanode2:/hadoop/dfs/data
+    environment:
+      SERVICE_PRECONDITION: "namenode:9870"
+      CORE_CONF_fs_defaultFS: hdfs://namenode:9000
+    ports:
+      - "9864:9864"
+    env_file:
+      - ./hadoop.env
+
+  datanode3:
+    image: ramilu90/hadoop-datanode
+    container_name: datanode3
+    platform: linux/amd64
+    restart: always
+    volumes:
+      - hadoop_datanode3:/hadoop/dfs/data
+    environment:
+      SERVICE_PRECONDITION: "namenode:9870"
+      CORE_CONF_fs_defaultFS: hdfs://namenode:9000
+    ports:
+      - "9864:9864"
+    env_file:
+      - ./hadoop.env
+
+  resourcemanager:
+    image: ramilu90/hadoop-datanode
+    container_name: resourcemanager
+    platform: linux/amd64
+    restart: always
+    environment:
+      SERVICE_PRECONDITION: "namenode:9000 namenode:9870 datanode1:9864 datanode2:9864 datanode3:9864"
+    env_file:
+      - ./hadoop.env
+
+  nodemanager1:
+    image: ramilu90/hadoop-datanode
+    container_name: nodemanager1
+    platform: linux/amd64
+    restart: always
+    environment:
+      SERVICE_PRECONDITION: "resourcemanager:8088"
+    env_file:
+      - ./hadoop.env
+
+  nodemanager2:
+    image: ramilu90/hadoop-datanode
+    container_name: nodemanager2
+    platform: linux/amd64
+    restart: always
+    environment:
+      SERVICE_PRECONDITION: "resourcemanager:8088"
+    env_file:
+      - ./hadoop.env
+
+  nodemanager3:
+    image: ramilu90/hadoop-datanode
+    container_name: nodemanager3
+    platform: linux/amd64
+    restart: always
+    environment:
+      SERVICE_PRECONDITION: "resourcemanager:8088"
+    env_file:
+      - ./hadoop.env
+
+  spark-master:
+    image: ramilu90/spark-master
+    container_name: spark-master
+    platform: linux/amd64
+    volumes:
+      - /home/dinithheshan-gcp-bdp-vm/bigdata-weather-analysis-sri-lanka/data:/home/data
+    depends_on:
+      - namenode
+      - datanode1
+      - datanode2
+      - datanode3
+    ports:
+      - "8080:8080"
+      - "7077:7077"
+    environment:
+      - INIT_DAEMON_STEP=setup_spark
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:9000
+
+  spark-worker1:
+    image: ramilu90/spark-worker
+    container_name: spark-worker1
+    platform: linux/amd64
+    depends_on:
+      - spark-master
+    ports:
+      - "8081:8081"
+    environment:
+      - "SPARK_MASTER=spark://spark-master:7077"
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:9000
+
+volumes:
+  hadoop_namenode:
+  hadoop_datanode1:
+  hadoop_datanode2:
+  hadoop_datanode3:
