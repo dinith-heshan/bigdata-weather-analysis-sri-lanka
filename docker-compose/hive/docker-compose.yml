@@ -13,7 +13,6 @@ services:
       - HDFS_NAMENODE_RPC_ADDRESS=namenode:8020
     volumes:
       - hadoop_namenode:/hadoop/dfs/name
-      - /home/dinithheshan-gcp-bdp-vm/bigdata-weather-analysis-sri-lanka/data:/home/data
     ports:
       - "50070:50070"
       - "8020:8020"
