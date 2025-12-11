@@ -1,4 +1,4 @@
-CREATE OR REPLACE TEMPORARY VIEW locationData_tmp_view
+CREATE TABLE locationData
 USING csv
 OPTIONS (
   path "/data/raw/locationData.csv",
