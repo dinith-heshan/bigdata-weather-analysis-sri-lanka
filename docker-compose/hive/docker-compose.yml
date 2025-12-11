@@ -9,7 +9,7 @@ services:
     env_file:
       - ./hadoop.env
     environment:
-      - CLUSTER_NAME=hadoop-cluster
+      - CLUSTER_NAME=bdp
       - HDFS_NAMENODE_RPC_ADDRESS=namenode:8020
     volumes:
       - hadoop_namenode:/hadoop/dfs/name
