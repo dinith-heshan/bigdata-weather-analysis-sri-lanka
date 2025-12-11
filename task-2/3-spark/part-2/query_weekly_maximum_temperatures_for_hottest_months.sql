@@ -20,7 +20,7 @@ hottest_months AS (
 SELECT
     h.year,
     h.month,
-    weekofyear(w.processed_date) AS week,
+    week,
     MAX(w.temperature_2m_max) AS temperature_2m_max_weekly_max
 FROM weatherData w
 JOIN hottest_months h
@@ -29,7 +29,7 @@ AND month(w.processed_date) = h.month
 GROUP BY
     h.year,
     h.month,
-    week
+    weekofyear(w.processed_date) AS week
 ORDER BY
     h.year,
     h.month,
