@@ -9,6 +9,7 @@ services:
       - 9010:9000
     volumes:
       - hadoop_namenode:/hadoop/dfs/name
+      - /home/dinithheshan-gcp-bdp-vm/bigdata-weather-analysis-sri-lanka/data:/home/data
     environment:
       - CLUSTER_NAME=bdp
       - CORE_CONF_fs_defaultFS=hdfs://namenode:9000
@@ -98,8 +99,6 @@ services:
     image: ramilu90/spark-master
     container_name: spark-master
     platform: linux/amd64
-    volumes:
-      - /home/dinithheshan-gcp-bdp-vm/bigdata-weather-analysis-sri-lanka/data:/home/data
     depends_on:
       - namenode
       - datanode1
