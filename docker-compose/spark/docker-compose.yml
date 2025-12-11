@@ -25,8 +25,6 @@ services:
     environment:
       SERVICE_PRECONDITION: "namenode:9870"
       CORE_CONF_fs_defaultFS: hdfs://namenode:9000
-    ports:
-      - "9864:9864"
     env_file:
       - ./hadoop.env
 
@@ -40,8 +38,6 @@ services:
     environment:
       SERVICE_PRECONDITION: "namenode:9870"
       CORE_CONF_fs_defaultFS: hdfs://namenode:9000
-    ports:
-      - "9864:9864"
     env_file:
       - ./hadoop.env
 
@@ -55,8 +51,6 @@ services:
     environment:
       SERVICE_PRECONDITION: "namenode:9870"
       CORE_CONF_fs_defaultFS: hdfs://namenode:9000
-    ports:
-      - "9864:9864"
     env_file:
       - ./hadoop.env
 
