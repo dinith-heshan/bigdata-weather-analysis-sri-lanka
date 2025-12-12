@@ -11,7 +11,7 @@ hottest_months AS (
     SELECT year, month
     FROM (
         SELECT *,
-               MAX(temperature_2m_max_avg) OVER () AS max_temp
+               MAX(temperature_2m_max_avg) OVER (PARTITION BY year) AS max_temp
         FROM monthly_avg
     ) AS hottest_months_with_max_temp
     WHERE temperature_2m_max_avg = max_temp
@@ -20,7 +20,7 @@ hottest_months AS (
 SELECT
     h.year,
     h.month,
-    week,
+    weekofyear(w.processed_date) AS week,
     MAX(w.temperature_2m_max) AS temperature_2m_max_weekly_max
 FROM weatherData w
 JOIN hottest_months h
@@ -29,7 +29,7 @@ AND month(w.processed_date) = h.month
 GROUP BY
     h.year,
     h.month,
-    weekofyear(w.processed_date) AS week
+    weekofyear(w.processed_date)
 ORDER BY
     h.year,
     h.month,
