@@ -3,6 +3,7 @@ services:
     image: apache/zeppelin:0.10.0
     container_name: zeppelin
     platform: linux/amd64
+    user: "$UID:$(id -g)"
     ports:
       - "8080:8080"  # Zeppelin UI
     environment:
