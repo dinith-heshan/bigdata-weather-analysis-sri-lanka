@@ -10,8 +10,8 @@ services:
       ZEPPELIN_NOTEBOOK_DIR: /notebook
       SPARK_HOME: /opt/spark
     volumes:
-      - zeppelin_logs/logs:/logs
-      - zeppelin_notebook/notebook:/notebook
+      - zeppelin_logs:/logs
+      - zeppelin_notebook:/notebook
       - /usr/lib/spark-current:/opt/spark
       - /home/dinithheshan-gcp-bdp-vm/bigdata-weather-analysis-sri-lanka/data:/home/data
     restart: unless-stopped
