@@ -7,7 +7,6 @@ services:
     environment:
       ZEPPELIN_LOG_DIR: /logs
       ZEPPELIN_NOTEBOOK_DIR: /notebook
-      SPARK_HOME: /opt/spark
     volumes:
       - /home/dinithheshan-gcp-bdp-vm/bigdata-weather-analysis-sri-lanka/data:/home/data
       - /home/dinithheshan-gcp-bdp-vm/bigdata-weather-analysis-sri-lanka/docker-compose/sparkMLib/logs:/logs
