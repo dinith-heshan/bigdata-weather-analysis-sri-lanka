@@ -1,4 +1,4 @@
-docker exec -it zeppeline /bin/bash
+docker exec -it zeppelin /bin/bash
 
 export UID=$(id -u)
 export GID=$(id -g)
