@@ -136,8 +136,8 @@ services:
       ZEPPELIN_NOTEBOOK_DIR: /notebook
       SPARK_MASTER: spark://spark-master:7077
     volumes:
-      - /home/dinithheshan-gcp-bdp-vm/bigdata-weather-analysis-sri-lanka/task-3/logs:/logs
-      - /home/dinithheshan-gcp-bdp-vm/bigdata-weather-analysis-sri-lanka/task-3/notebook:/notebook
+      - zeppelin_logs:/logs
+      - zeppelin_notebook:/notebook
     restart: unless-stopped
 
 volumes:
@@ -145,3 +145,6 @@ volumes:
   hadoop_datanode1:
   hadoop_datanode2:
   hadoop_datanode3:
+  zeppelin_logs:
+  zeppelin_notebook:
+  
