@@ -3,7 +3,7 @@ services:
     image: apache/zeppelin:0.10.0
     container_name: zeppelin
     platform: linux/amd64
-    user: "${UID}:${GID}"
+    user: "$UID:$(id -g)"
     ports:
       - "8080:8080"  # Zeppelin UI
     environment:
@@ -11,10 +11,9 @@ services:
       ZEPPELIN_NOTEBOOK_DIR: /notebook
       SPARK_HOME: /opt/spark
     volumes:
-      - zeppelin_logs:/logs
-      - zeppelin_notebook:/notebook
       - /usr/lib/spark-current:/opt/spark
       - /home/dinithheshan-gcp-bdp-vm/bigdata-weather-analysis-sri-lanka/data:/home/data
+      - /home/dinithheshan-gcp-bdp-vm/bigdata-weather-analysis-sri-lanka/docker-compose/sparkMLib/logs:/logs
+      - /home/dinithheshan-gcp-bdp-vm/bigdata-weather-analysis-sri-lanka/docker-compose/sparkMLib/notebook:/notebook
     restart: unless-stopped
-
-  
+    
