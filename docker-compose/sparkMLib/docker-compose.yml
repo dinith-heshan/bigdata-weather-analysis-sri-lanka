@@ -3,6 +3,7 @@ services:
     image: apache/zeppelin:0.10.0
     container_name: zeppelin
     platform: linux/amd64
+    user: "${UID}:${GID}"
     ports:
       - "8080:8080"  # Zeppelin UI
     environment:
@@ -16,7 +17,4 @@ services:
       - /home/dinithheshan-gcp-bdp-vm/bigdata-weather-analysis-sri-lanka/data:/home/data
     restart: unless-stopped
 
-volumes:
-  zeppelin_logs:
-  zeppelin_notebook:
   
