@@ -3,4 +3,4 @@ docker exec -it zeppeline /bin/bash
 export UID=$(id -u)
 export GID=$(id -g)
 
-sudo chown -R $UID:$GID ./logs ./notebook
+sudo chown -R $UID:$GID /home/dinithheshan-gcp-bdp-vm/bigdata-weather-analysis-sri-lanka/docker-compose/sparkMLib/logs /home/dinithheshan-gcp-bdp-vm/bigdata-weather-analysis-sri-lanka/docker-compose/sparkMLib//notebook
