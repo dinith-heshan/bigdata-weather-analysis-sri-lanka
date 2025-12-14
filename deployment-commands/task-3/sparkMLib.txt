@@ -3,4 +3,4 @@ docker exec -it zeppeline /bin/bash
 export UID=$(id -u)
 export GID=$(id -g)
 
-sudo chown -R $UID:$GID ./zeppelin_logs ./zeppelin_notebook
+sudo chown -R $UID:$GID ./logs ./notebook
