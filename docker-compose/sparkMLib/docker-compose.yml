@@ -10,7 +10,6 @@ services:
       ZEPPELIN_NOTEBOOK_DIR: /notebook
       SPARK_HOME: /opt/spark
     volumes:
-      - /usr/lib/spark-current:/opt/spark
       - /home/dinithheshan-gcp-bdp-vm/bigdata-weather-analysis-sri-lanka/data:/home/data
       - /home/dinithheshan-gcp-bdp-vm/bigdata-weather-analysis-sri-lanka/docker-compose/sparkMLib/logs:/logs
       - /home/dinithheshan-gcp-bdp-vm/bigdata-weather-analysis-sri-lanka/docker-compose/sparkMLib/notebook:/notebook
