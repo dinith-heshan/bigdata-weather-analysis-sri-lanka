@@ -1,1 +1,3 @@
 docker exec -it zeppeline /bin/bash
+
+sudo chown -R $UID:$GID ./zeppelin_logs ./zeppelin_notebook
