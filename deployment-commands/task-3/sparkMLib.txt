@@ -1,5 +1,7 @@
 docker exec -it zeppelin /bin/bash
 
+chmod -R 777 /home/dinithheshan-gcp-bdp-vm/bigdata-weather-analysis-sri-lanka/docker-compose/sparkMLib/logs /home/dinithheshan-gcp-bdp-vm/bigdata-weather-analysis-sri-lanka/docker-compose/sparkMLib//notebook
+
 export UID=$(id -u)
 export GID=$(id -g)
 
