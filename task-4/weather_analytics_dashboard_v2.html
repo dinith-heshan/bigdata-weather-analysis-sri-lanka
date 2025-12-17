@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sri Lanka Weather Analytics Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .global-filters {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            color: #333;
+            white-space: nowrap;
+        }
+
+        select {
+            padding: 7px 10px;
+            border: medium solid rgb(225, 225, 225);
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            background: white;
+            min-width: 150px;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: rgb(200, 200, 200);
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 25px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .card-title-section {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .card-title {
+            font-size: 1.4em;
+            color: #333;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .card-subtitle {
+            font-size: 0.9em;
+            color: #888;
+        }
+
+        .card-filters {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+
+        .chart-container.scrollable {
+            min-width: 100%;
+        }
+
+        .chart-wrapper {
+            min-width: 1200px;
+            height: 400px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.85em;
+            opacity: 0.95;
+        }
+
+        .insight-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .insight-box h4 {
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .insight-box p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .filter-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filter-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            select {
+                width: 100%;
+            }
+        }
+
+        .temp-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 25px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌦️ Sri Lanka Weather Analytics Dashboard</h1>
+            <p>Historical Weather Data Analysis (2010 - 2024)</p>
+        </div>
+
+        <!-- Global Filters -->
+        <div class="global-filters">
+            <div class="filter-row">
+                <div class="filter-group">
+                    <label>📅 Time Period:</label>
+                    <select id="globalPeriodFilter" onchange="updateGlobalPeriod()">
+                        <option value="all">All Years (2010-2024)</option>
+                        <option value="recent5">Recent 5 Years (2019-2024)</option>
+                        <option value="recent3">Recent 3 Years (2021-2024)</option>
+                        <option value="decade">Past Decade (2014-2024)</option>
+                        <option value="early">Early Period (2010-2015)</option>
+                        <option value="mid">Mid Period (2016-2020)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 1: Most Precipitous Month/Season by District -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title-section">
+                    <h2 class="card-title">Most Precipitous Month / Season by District</h2>
+                    <p class="card-subtitle">
+                    Highest rainfall month or season for each district within the selected time period
+                    </p>
+                </div>
+                <div class="card-filters">
+                    <div class="filter-group">
+                        <label>View By:</label>
+                        <select id="precip1ViewBy" onchange="updateChart1()">
+                            <option value="month">Month</option>
+                            <option value="season">Season</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="chart-container scrollable">
+                <div class="chart-wrapper">
+                    <canvas id="precipitationChart1"></canvas>
+                </div>
+            </div>
+            <div class="insight-box">
+                <h4>💡 Key Insights</h4>
+                <p id="chart1Insight">Ratnapura shows highest precipitation during Southwest Monsoon (May-June). Coastal districts peak during Inter-Monsoon periods.</p>
+            </div>
+        </div>
+
+        <!-- Card 2: Top 5 Districts by Precipitation -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title-section">
+                    <h2 class="card-title">Top 5 Districts by Total Precipitation</h2>
+                    <p class="card-subtitle">Ranked by cumulative precipitation</p>
+                </div>
+                <div class="card-filters">
+                    <div class="filter-group">
+                        <label>Year:</label>
+                        <select id="precip2Year" onchange="updateChart2()">
+                            <option value="all">All Years (2010-2024)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-box" id="top1"></div>
+                <div class="stat-box" id="top2"></div>
+                <div class="stat-box" id="top3"></div>
+                <div class="stat-box" id="top4"></div>
+                <div class="stat-box" id="top5"></div>
+            </div>
+            <div class="chart-container">
+                <canvas id="precipitationChart2"></canvas>
+            </div>
+        </div>
+
+        <!-- Card 3: Temperature Above 30°C -->
+        <div class="temp-card">
+            <h2 class="card-title">3. Months with Mean Temperature > 30°C</h2>
+            <p class="card-subtitle">Percentage by year showing climate trends</p>
+            <div class="chart-container">
+                <canvas id="temperatureChart"></canvas>
+            </div>
+            <div class="insight-box">
+                <h4>💡 Trend Analysis</h4>
+                <p>Rising trend observed: 2020-2024 shows 25-32% of months exceeding 30°C compared to 15-20% in 2010-2015.</p>
+            </div>
+        </div>
+
+        <!-- Card 4: Extreme Weather Events -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title-section">
+                    <h2 class="card-title">4. Extreme Weather Events Analysis</h2>
+                    <p class="card-subtitle">Days meeting extreme weather criteria</p>
+                </div>
+                <div class="card-filters">
+                    <div class="filter-group">
+                        <label>Criteria:</label>
+                        <select id="extremeCriteria" onchange="updateChart4()">
+                            <option value="both">High Precip + High Wind</option>
+                            <option value="precip">High Precipitation Only</option>
+                            <option value="wind">High Wind Gusts Only</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Group By:</label>
+                        <select id="extremeGroupBy" onchange="updateChart4()">
+                            <option value="district">By District</option>
+                            <option value="year">By Year</option>
+                            <option value="month">By Month</option>
+                        </select>
+                    </div>
+                    <div id="extremeAdditionalFilters" class="card-filters" style="margin-top: 15px;">
+                        <!-- Dynamic filters will be inserted here -->
+                    </div>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="extremeWeatherChart"></canvas>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-value" id="statAvgPerYear">132</div>
+                    <div class="stat-label">Average Days Per Year</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="statPeakYear">2023</div>
+                    <div class="stat-label">Frequent Peak Year</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="statPeakMonth">May</div>
+                    <div class="stat-label">Frequent Peak Month</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="statPeakDistrict">Ratnapura</div>
+                    <div class="stat-label">Frequent Peak District</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="statMaxPrecip">287mm</div>
+                    <div class="stat-label">Highest Precipitation Recorded</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="statMaxWind">98km/h</div>
+                    <div class="stat-label">Highest Wind Gust Recorded</div>
+                </div>
+            </div>
+            <div class="insight-box">
+                <h4>⚠️ Critical Finding</h4>
+                <p id="chart4Insight">Extreme weather events show increasing frequency. Peak occurrences align with monsoon transitions.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Comprehensive dummy data for all 25 districts
+        const allDistricts = [
+            'Colombo', 'Gampaha', 'Kalutara', 'Kandy', 'Matale', 'Nuwara Eliya',
+            'Galle', 'Matara', 'Hambantota', 'Jaffna', 'Kilinochchi', 'Mannar',
+            'Vavuniya', 'Mullaitivu', 'Batticaloa', 'Ampara', 'Trincomalee',
+            'Kurunegala', 'Puttalam', 'Anuradhapura', 'Polonnaruwa', 'Badulla',
+            'Monaragala', 'Ratnapura', 'Kegalle'
+        ];
+
+        const years = ['2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024'];
+        
+        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ];
+        const monthsAbbr = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        const seasons = ['Southwest Monsoon', 'Northeast Monsoon', 'Inter-Monsoon 1', 'Inter-Monsoon 2'];
+        const seasonAbbr = {
+            'Southwest Monsoon': 'SWM',
+            'Northeast Monsoon': 'NEM',
+            'Inter-Monsoon 1': 'IM1',
+            'Inter-Monsoon 2': 'IM2'
+        };
+
+        // Chart instances
+        let chart1, chart2, chart3, chart4;
+
+        // Color palette
+        const colors = {
+            primary: ['#667eea', '#764ba2', '#f093fb', '#4facfe', '#43e97b', '#fa709a', '#fee140', '#30cfd0', '#c471ed', '#f38181'],
+            gradient: 'rgba(102, 126, 234, 0.8)'
+        };
+
+        // Generate random precipitation data
+        function generatePrecipData(districts, periods, baseMin, baseMax) {
+            return periods.map(() => 
+                districts.map(() => Math.floor(Math.random() * (baseMax - baseMin) + baseMin))
+            );
+        }
+
+        // Generate extreme weather data
+        function generateExtremeData() {
+            const data = {};
+            allDistricts.forEach(district => {
+                data[district] = {};
+                years.forEach(year => {
+                    data[district][year] = {};
+                    monthsAbbr.forEach(month => {
+                        data[district][year][month] = {
+                            both: Math.floor(Math.random() * 8),
+                            precip: Math.floor(Math.random() * 12),
+                            wind: Math.floor(Math.random() * 10)
+                        };
+                    });
+                });
+            });
+            return data;
+        }
+
+        const extremeWeatherData = generateExtremeData();
+
+        // Update global period and sync year dropdowns
+        function updateGlobalPeriod() {
+            const period = document.getElementById('globalPeriodFilter').value;
+            const yearRanges = {
+                'all': years,
+                'recent5': years.slice(-5),
+                'recent3': years.slice(-3),
+                'decade': years.slice(-10),
+                'early': years.slice(0, 6),
+                'mid': years.slice(6, 11)
+            };
+            
+            const selectedYears = yearRanges[period];
+            updateYearDropdowns(selectedYears, period);
+            updateAllCharts();
+        }
+
+        function updateYearDropdowns(yearsList, periodLabel) {
+            const periodLabels = {
+                'all': 'All Years (2010-2024)',
+                'recent5': 'Recent 5 Years (2019-2024)',
+                'recent3': 'Recent 3 Years (2021-2024)',
+                'decade': 'Past Decade (2014-2024)',
+                'early': 'Early Period (2010-2015)',
+                'mid': 'Mid Period (2016-2020)'
+            };
+
+            ['precip2Year'].forEach(id => {
+                const select = document.getElementById(id);
+                const currentValue = select.value;
+                select.innerHTML = `<option value="all">${periodLabels[periodLabel]}</option>`;
+                yearsList.forEach(year => {
+                    select.innerHTML += `<option value="${year}">${year}</option>`;
+                });
+                if (yearsList.includes(currentValue)) {
+                    select.value = currentValue;
+                }
+            });
+        }
+
+        // Chart 1: Most Precipitous Period by District
+        function updateChart1() {
+            const viewBy = document.getElementById('precip1ViewBy').value;
+
+            const periods = viewBy === 'month' ? monthsAbbr : seasons;
+
+            // For each district, find the single most precipitous period
+            const peakData = allDistricts.map(district => {
+                let maxValue = 0;
+                let peakPeriod = '';
+
+                periods.forEach(period => {
+                    const value =
+                        viewBy === 'month'
+                            ? Math.floor(Math.random() * 400 + 100)   // monthly
+                            : Math.floor(Math.random() * 400 + 100);  // seasonal
+
+                    if (value > maxValue) {
+                        maxValue = value;
+                        peakPeriod = period;
+                    }
+                });
+
+                return { district, maxValue, peakPeriod };
+            });
+
+            if (chart1) chart1.destroy();
+
+            const ctx = document.getElementById('precipitationChart1').getContext('2d');
+            chart1 = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: peakData.map(d => d.district),
+                    datasets: [{
+                        label: `Peak ${viewBy === 'month' ? 'Monthly' : 'Seasonal'} Precipitation`,
+                        data: peakData.map(d => d.maxValue),
+                        backgroundColor: colors.primary[0]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: (ctx) => {
+                                    const d = peakData[ctx.dataIndex];
+                                if (viewBy === 'month') {
+                                    const fullMonth = months[monthsAbbr.indexOf(d.peakPeriod)];
+                                    return `${d.maxValue} mm (${fullMonth})`;
+                                } else {
+                                    return `${d.maxValue} mm (${d.peakPeriod})`;
+                                }
+                                }
+                            }
+                        },
+
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'top',
+                            formatter: (_, ctx) => {
+                                const period = peakData[ctx.dataIndex].peakPeriod;
+                                return viewBy === 'season' ? seasonAbbr[period] : period;
+                            },
+                            font: {
+                                weight: 'bold',
+                                size: 10
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 600,
+                            title: {
+                                display: true,
+                                text: 'Precipitation (mm)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'District'
+                            }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            document.getElementById('chart1Insight').textContent =
+                viewBy === 'season'
+                    ? `Peak seasonal precipitation is shown using standard monsoon abbreviations: SWM (Southwest Monsoon), NEM (Northeast Monsoon), IM1 (First Inter-Monsoon), and IM2 (Second Inter-Monsoon). This highlights dominant monsoon influences across districts during the selected period.`
+                    : `For each district, the month with the highest recorded precipitation was identified within the selected time period, revealing clear seasonal rainfall variability across regions.`;
+        }
+
+        // Chart 2: Top 5 Districts
+        function updateChart2() {
+            const year = document.getElementById('precip2Year').value;
+            
+            const topDistrictsData = [
+                { name: 'Ratnapura', value: 45230 },
+                { name: 'Galle', value: 38450 },
+                { name: 'Kalutara', value: 36780 },
+                { name: 'Kandy', value: 32450 },
+                { name: 'Colombo', value: 31200 }
+            ];
+
+            // Update stat boxes
+            topDistrictsData.forEach((district, idx) => {
+                const box = document.getElementById(`top${idx + 1}`);
+                box.innerHTML = `
+                    <div class="stat-value">#${idx + 1}</div>
+                    <div class="stat-label">${district.name}</div>
+                    <div style="font-size: 1.3em; margin-top: 5px;">${district.value.toLocaleString()}mm</div>
+                `;
+            });
+
+            if (chart2) chart2.destroy();
+            
+            const ctx = document.getElementById('precipitationChart2').getContext('2d');
+            chart2 = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: topDistrictsData.map(d => d.name),
+                    datasets: [{
+                        label: 'Total Precipitation',
+                        data: topDistrictsData.map(d => d.value),
+                        backgroundColor: colors.primary,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            enabled: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Total Precipitation (mm)' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Chart 3: Temperature Above 30°C
+        function initChart3() {
+            const ctx = document.getElementById('temperatureChart').getContext('2d');
+            chart3 = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: years,
+                    datasets: [{
+                        label: 'Percentage of Months > 30°C',
+                        data: [15, 17, 16, 18, 20, 19, 21, 23, 24, 22, 25, 27, 28, 30, 32],
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 35,
+                            title: { display: true, text: 'Percentage (%)' }
+                        },
+                        x: {
+                            title: { display: true, text: 'Year' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Chart 4: Extreme Weather Events
+        function updateChart4() {
+            const criteria = document.getElementById('extremeCriteria').value;
+            const groupBy = document.getElementById('extremeGroupBy').value;
+            
+            // Update additional filters based on groupBy
+            const filtersDiv = document.getElementById('extremeAdditionalFilters');
+            if (groupBy === 'district') {
+                filtersDiv.innerHTML = `
+                    <div class="filter-group">
+                        <label>Year:</label>
+                        <select id="extreme4Year" onchange="updateChart4()">
+                            <option value="all">All Years</option>
+                            ${years.map(y => `<option value="${y}">${y}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Month:</label>
+                        <select id="extreme4Month" onchange="updateChart4()">
+                            <option value="all">All Months</option>
+                            ${monthsAbbr.map(m => `<option value="${m}">${m}</option>`).join('')}
+                        </select>
+                    </div>
+                `;
+            } else if (groupBy === 'year') {
+                filtersDiv.innerHTML = `
+                    <div class="filter-group">
+                        <label>District:</label>
+                        <select id="extreme4District" onchange="updateChart4()">
+                            <option value="all">All Districts</option>
+                            ${allDistricts.map(d => `<option value="${d}">${d}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Month:</label>
+                        <select id="extreme4Month" onchange="updateChart4()">
+                            <option value="all">All Months</option>
+                            ${monthsAbbr.map(m => `<option value="${m}">${m}</option>`).join('')}
+                        </select>
+                    </div>
+                `;
+            } else { // month
+                filtersDiv.innerHTML = `
+                    <div class="filter-group">
+                        <label>Year:</label>
+                        <select id="extreme4Year" onchange="updateChart4()">
+                            <option value="all">All Years</option>
+                            ${years.map(y => `<option value="${y}">${y}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>District:</label>
+                        <select id="extreme4District" onchange="updateChart4()">
+                            <option value="all">All Districts</option>
+                            ${allDistricts.map(d => `<option value="${d}">${d}</option>`).join('')}
+                        </select>
+                    </div>
+                `;
+            }
+
+            let labels, data;
+            if (groupBy === 'district') {
+                labels = allDistricts;
+                data = labels.map(() => Math.floor(Math.random() * 50 + 100));
+            } else if (groupBy === 'year') {
+                labels = years;
+                data = labels.map(() => Math.floor(Math.random() * 100 + 80));
+            } else {
+                labels = monthsAbbr;
+                data = labels.map(() => Math.floor(Math.random() * 80 + 60));
+            }
+
+            // Update statistics
+            document.getElementById('statAvgPerYear').textContent = Math.floor(data.reduce((a,b) => a+b, 0) / years.length);
+            document.getElementById('statPeakDistrict').textContent = allDistricts[Math.floor(Math.random() * 5)];
+            document.getElementById('statPeakYear').textContent = years[years.length - Math.floor(Math.random() * 3) - 1];
+            document.getElementById('statPeakMonth').textContent = monthsAbbr[4]; // May
+            document.getElementById('statMaxPrecip').textContent = '287mm';
+            document.getElementById('statMaxWind').textContent = '98km/h';
+
+            if (chart4) chart4.destroy();
+            
+            const ctx = document.getElementById('extremeWeatherChart').getContext('2d');
+            chart4 = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels,
+                    datasets: [{
+                        label: 'Extreme Weather Days',
+                        data,
+                        backgroundColor: colors.gradient,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => `${context.parsed.y} days`
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Number of Days' }
+                        },
+                        x: {
+                            title: { display: true, text: groupBy.charAt(0).toUpperCase() + groupBy.slice(1) }
+                        }
+                    }
+                }
+            });
+
+            const criteriaText = criteria === 'both' ? 'high precipitation AND high wind gusts' : 
+                                criteria === 'precip' ? 'high precipitation only' : 'high wind gusts only';
+            document.getElementById('chart4Insight').textContent = 
+                `Analysis shows extreme weather events (${criteriaText}) grouped by ${groupBy}. Peak occurrences align with monsoon transitions.`;
+        }
+
+        function updateAllCharts() {
+            updateChart1();
+            updateChart2();
+            updateChart4();
+        }
+
+        // Initialize all charts on page load
+        window.onload = function() {
+            updateGlobalPeriod();
+            initChart3();
+        };
+    </script>
+</body>
+</html>
